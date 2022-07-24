@@ -1,6 +1,5 @@
 class Game {
-
-  constructor(height = 6, width = 7) {
+  constructor (height, width) {
     this.width = width;
     this.height = height;
     this.currPlayer = 1;
@@ -93,10 +92,15 @@ class Game {
     }
 
     // switch players
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    this.currPlayer === 1 ? this.currPlayer = 2 : this.currPlayer = 1;
   }
 
   checkForWin() {
+  // pass in instance of height into _win below. this.height is accessible by checkForWin, but not _win yet. have to find a pass to pass it in.
+    let height = this.height;
+    let width = this.width;
+    let board = this.board;
+    let currPlayer = this.currPlayer;
     function _win(cells) {
       // Check four cells to see if they're all color of current player
       //  - cells: list of four (y, x) cells
@@ -105,10 +109,10 @@ class Game {
       return cells.every(
         ([y, x]) =>
           y >= 0 &&
-          y < this.height &&
+          y < height &&
           x >= 0 &&
-          x < this.width &&
-          this.board[y][x] === this.currPlayer
+          x < width &&
+          board[y][x] === currPlayer
       );
     }
 
