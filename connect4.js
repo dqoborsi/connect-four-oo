@@ -1,11 +1,13 @@
 class Game {
-  constructor (height, width) {
+  constructor (p1, p2, height = 6, width = 7) {
+    this.players = [p1, p2];
     this.width = width;
     this.height = height;
     this.currPlayer = 1;
     this.board = [];
     this.makeBoard();
     this.makeHtmlBoard();
+    this.gameOver = false;
   }
 
   makeBoard() {
@@ -65,9 +67,12 @@ class Game {
 
   endGame(msg) {
     alert(msg);
+    const top = document.querySelector('#column-top')
+    top.removeEventListener('click', this.handleGameClick)
   }
 
   handleClick(evt) {
+
     // get x from ID of clicked cell
     const x = +evt.target.id;
 
@@ -83,6 +88,7 @@ class Game {
 
     // check for win
     if (this.checkForWin()) {
+      this.gameOver = true;
       return this.endGame(`Player ${this.currPlayer} won!`);
     }
 
@@ -93,28 +99,26 @@ class Game {
 
     // switch players
     this.currPlayer === 1 ? this.currPlayer = 2 : this.currPlayer = 1;
-  }
+
+}
 
   checkForWin() {
   // pass in instance of height into _win below. this.height is accessible by checkForWin, but not _win yet. have to find a pass to pass it in.
-    let height = this.height;
-    let width = this.width;
-    let board = this.board;
-    let currPlayer = this.currPlayer;
-    function _win(cells) {
+
+    const _win = cells =>
       // Check four cells to see if they're all color of current player
       //  - cells: list of four (y, x) cells
       //  - returns true if all are legal coordinates & all match currPlayer
 
-      return cells.every(
+      cells.every(
         ([y, x]) =>
           y >= 0 &&
-          y < height &&
+          y < this.height &&
           x >= 0 &&
-          x < width &&
-          board[y][x] === currPlayer
+          x < this.width &&
+          this.board[y][x] === this.currPlayer
       );
-    }
+
 
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
@@ -134,4 +138,13 @@ class Game {
   }
 }
 
-new Game(6, 7);
+class Player {
+  constructor(color){
+    this.color = color;
+  }
+  // methods
+}
+
+document.getElementById('start-game').addEventListener('click', () => {
+  new Game()
+})
